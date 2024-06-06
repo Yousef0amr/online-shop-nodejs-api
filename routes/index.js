@@ -7,7 +7,7 @@ import multerConfig from "../utils/multer.js";
 import userRouter from "./user.route.js";
 import shipmentRouter from "./shipment.route.js";
 import paymentRouter from "./payment.route.js";
-import orderRouter from "./order.route.js";
+// import orderRouter from "./order.route.js";
 import endpoints from "../utils/endoints.js";
 
 
@@ -23,7 +23,7 @@ mainRouter.use(endpoints.USER, multerConfig().array(''), userRouter)
 mainRouter.use(endpoints.SHIPMENT, multerConfig().array(''), shipmentRouter)
 
 mainRouter.use(endpoints.PAYMENT, multerConfig().array(''), paymentRouter)
-mainRouter.use(endpoints.ORDER, multerConfig().array(''), orderRouter)
+// mainRouter.use(endpoints.ORDER, multerConfig().array(''), orderRouter)
 
 
 

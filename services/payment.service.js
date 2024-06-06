@@ -55,12 +55,13 @@ const deletePayment = async (id) => {
 
 
 const webhookCheckout = async (req) => {
-    const sig = request.headers['stripe-signature'];
+    const sig = req.headers['stripe-signature'];
 
     let event;
 
     try {
         event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+        console.log(event)
     } catch (err) {
         console.log(err)
         return;
@@ -75,42 +76,44 @@ const webhookCheckout = async (req) => {
             console.log(`Unhandled event type ${event.type}`);
     }
 
-    // Return a 200 response to acknowledge receipt of the event
-    response.send();
 }
+
+const convertToCents = (price) => {
+    return Math.round(parseFloat(price) * 100);
+}
+
 
 
 const createCheckoutSession = async (req) => {
     const id = req.user_id
 
     const cart = await cartService.getCart(id)
-    console.log(cart.totalPrice)
+
     if (!cart) {
         return new ApiError('Cart is Emety', 400)
     }
-    // const session = await stripe.checkout.sessions.create({
-    //     line_items: [
-    //         {
-    //             price_data: {
-    //                 currency: 'usd',
-    //                 product_data: {
-    //                     name: 'T-shirt',
-    //                     description: 'Comfortable cotton t-shirt',
-    //                     images: ['https://example.com/t-shirt.png'],
-    //                 },
-    //                 unit_amount: 2000,
 
-    //             },
-    //             quantity: 1,
-    //         },
-    //     ],
-    //     mode: 'payment',
-    //     success_url: `${req.protocol}://${req.get('host')}/orders`,
-    //     cancel_url: `${req.protocol}://${req.get('host')}/cart`,
-    // });
+    const lineItems = cart.map(item => ({
+        price_data: {
+            currency: 'usd',
+            product_data: {
+                name: item.dataValues.product.dataValues.title,
+                description: item.dataValues.product.dataValues.description,
+            },
+            unit_amount: convertToCents(item.dataValues.product.dataValues.price),
+        },
+        quantity: item.dataValues.quantity,
+    }));
+
+    const session = await stripe.checkout.sessions.create({
+        line_items: lineItems,
+        mode: 'payment',
+        success_url: `${req.protocol}://${req.get('host')}/orders`,
+        cancel_url: `${req.protocol}://${req.get('host')}/cart`,
+    });
 
 
-    return cart
+    return session
 }
 
 

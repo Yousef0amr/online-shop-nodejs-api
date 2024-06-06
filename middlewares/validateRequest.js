@@ -1,5 +1,5 @@
 
-const validateRequset = (schema) => (req, res, next) => {
+const validateRequest = (schema) => (req, res, next) => {
 
     const { error, value } = schema.validate({ ...req.body })
     if (error) {
@@ -8,4 +8,4 @@ const validateRequset = (schema) => (req, res, next) => {
     return next()
 }
 
-export default validateRequset
+export default validateRequest
