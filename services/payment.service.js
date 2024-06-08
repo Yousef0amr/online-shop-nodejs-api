@@ -68,7 +68,6 @@ const webhookCheckout = async (req) => {
     switch (event.type) {
         case 'checkout.session.completed':
             const checkoutSessionCompleted = event.data.object;
-            console.log(checkoutSessionCompleted)
             break;
         default:
             console.log(`Unhandled event type ${event.type}`);
