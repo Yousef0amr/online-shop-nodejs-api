@@ -12,7 +12,7 @@ const createCheckoutSession = wrap(async (req, res, next) => {
 
 const webhookCheckout = wrap(async (req, res, next) => {
     const callback = await PaymentService.webhookCheckout(req)
-    return success(res, { received: true }, 200)
+    return callback.stack ? next(callback) : success(res, { received: true }, 200)
 })
 
 
