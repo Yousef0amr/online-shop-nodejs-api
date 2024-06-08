@@ -16,7 +16,7 @@ const getAllOrders = async () => {
     });
 }
 
-const createOrder = wrap(async (orderDto, userId) => {
+const createOrder = async (orderDto, userId) => {
     const { order_date, totalPrice, paymentId, shipmentId, orderItems } = orderDto;
 
     // Create the order
@@ -40,7 +40,7 @@ const createOrder = wrap(async (orderDto, userId) => {
 
     return order
 }
-)
+
 
 const updateOrder = async (updateOrderDto, id) => {
     return await Order.update(

@@ -60,7 +60,7 @@ const webhookCheckout = async (req) => {
     let event;
 
     try {
-        event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+        event = stripe.webhooks.constructEvent(req.body, sig, 'we_1PPCndHCIgRCYpOFNR60XSKQ');
         console.log(event)
     } catch (err) {
         console.log(err)
