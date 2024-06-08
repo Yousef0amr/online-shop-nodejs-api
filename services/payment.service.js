@@ -59,7 +59,7 @@ const webhookCheckout = async (req) => {
     const sig = req.headers['stripe-signature'];
 
     try {
-        event = stripe.webhooks.constructEvent(JSON.stringify(req.body), sig, 'we_1PPCndHCIgRCYpOFNR60XSKQ');
+        event = stripe.webhooks.constructEvent(JSON.stringify(req.body), sig, 'whsec_mKAIywDSsFky5rSW6hS6jPYw122gOxBh');
     } catch (err) {
         console.log(err)
         return;
