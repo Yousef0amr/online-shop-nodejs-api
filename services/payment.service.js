@@ -64,6 +64,7 @@ const webhookCheckout = async (req) => {
     try {
         event = stripe.webhooks.constructEvent(payload, sig, secret);
     } catch (err) {
+        console.log(err)
         return new ApiError(err.message, 400);
     }
 
