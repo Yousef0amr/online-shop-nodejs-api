@@ -87,7 +87,7 @@ const authJwt = () => {
             path: [
                 ...authRegxOperations(endpoints.USER),
                 { url: `${endpoints.CATEGORY}`, method: ["GET", "OPTIONS"] },
-                { url: `/payments/webhook-checkout'`, method: ["POST", "OPTIONS"] },
+                { url: `${endpoints.PAYMENT}/webhook-checkout`, method: ["POST", "OPTIONS"] },
             ]
         }
     )
