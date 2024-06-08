@@ -55,13 +55,13 @@ const deletePayment = async (id) => {
 
 
 const webhookCheckout = async (req) => {
-    const sig = req.headers['stripe-signature'];
-    console.log(req)
-    let event;
 
+    console.log(req.headers)
+    let event;
+    const sig = req.headers['stripe-signature'];
     try {
         event = stripe.webhooks.constructEvent(JSON.stringify(req.body), sig, 'we_1PPCndHCIgRCYpOFNR60XSKQ');
-        console.log(event)
+
     } catch (err) {
         console.log(err)
         return;
@@ -70,7 +70,7 @@ const webhookCheckout = async (req) => {
     switch (event.type) {
         case 'checkout.session.completed':
             const checkoutSessionCompleted = event.data.object;
-            console.log(checkoutSessionCompleted)
+
             break;
         default:
             console.log(`Unhandled event type ${event.type}`);
