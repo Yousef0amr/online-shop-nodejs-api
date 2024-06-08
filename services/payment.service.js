@@ -56,7 +56,7 @@ const deletePayment = async (id) => {
 
 const webhookCheckout = async (req) => {
     const sig = req.headers['stripe-signature'];
-
+    console.log(req)
     let event;
 
     try {
