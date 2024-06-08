@@ -58,8 +58,11 @@ const webhookCheckout = async (req) => {
     let event;
     const sig = req.headers['stripe-signature'];
 
+    const payload = req.body
+
+    const secret = 'whsec_mKAIywDSsFky5rSW6hS6jPYw122gOxBh'
     try {
-        event = stripe.webhooks.constructEvent(req.body, sig, 'whsec_mKAIywDSsFky5rSW6hS6jPYw122gOxBh');
+        event = stripe.webhooks.constructEvent(payload, sig, secret);
     } catch (err) {
         return new ApiError(err.message, 400);
     }
@@ -72,6 +75,9 @@ const webhookCheckout = async (req) => {
         default:
             return new ApiError(`Unhandled event type ${event.type}`, 400);
     }
+
+
+    return checkoutSessionCompleted
 
 }
 
