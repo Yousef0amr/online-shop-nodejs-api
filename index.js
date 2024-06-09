@@ -21,7 +21,12 @@ const init = async () => {
 
     const app = express()
 
-    app.use(express.json())
+    app.use(express.json({
+        verify:
+            (req, res, buf) => {
+                console.log(buf)
+            }
+    }))
 
     if (process.env.NODE_ENV === 'dev') {
         app.use(morgan('dev'))
