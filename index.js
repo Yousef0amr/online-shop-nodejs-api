@@ -21,7 +21,13 @@ const init = async () => {
 
     const app = express()
 
-    app.use(express.json())
+    app.use((req, res, next) => {
+        if (req.path === '/payment/webhook-checkout') {
+            next();
+        } else {
+            express.json()(req, res, next);
+        }
+    });
 
     if (process.env.NODE_ENV === 'dev') {
         app.use(morgan('dev'))
