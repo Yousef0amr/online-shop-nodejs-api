@@ -68,9 +68,8 @@ const webhookCheckout = async (req) => {
 
     switch (event.type) {
         case 'checkout.session.completed':
-            const checkoutSessionCompleted = event.data.object;
             const id = event.data.object.client_reference_id
-
+            console.log(id)
             const cart = await cartService.getCart(id);
 
             cart.map(async (p) => {
