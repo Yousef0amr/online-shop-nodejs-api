@@ -84,7 +84,7 @@ const convertToCents = (price) => {
 
 const createCheckoutSession = async (req) => {
     const id = req.user_id
-    const shipmentId = req.params.shipmentId
+    const shipmentId = req.query.shipmentId
 
     const cart = await cartService.getCart(id)
 
