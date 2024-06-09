@@ -24,13 +24,18 @@ const init = async () => {
 
     app.use((req, res, next) => {
         if (req.path === `${endpoints.PAYMENT}/webhook-checkout`) {
-            next();
+            express.json({
+                verify: (req, res, buf) => {
+                    req.rawBody = buf
+                }
+            })(req, res, next)
         } else {
             express.json()(req, res, next);
         }
 
-    }, (req, res) => {
+    }, (req, res, next) => {
         console.log(req.body)
+        next()
     });
 
     if (process.env.NODE_ENV === 'dev') {
