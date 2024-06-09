@@ -32,10 +32,6 @@ const init = async () => {
         } else {
             express.json()(req, res, next);
         }
-
-    }, (req, res, next) => {
-        console.log(req.body)
-        next()
     });
 
     if (process.env.NODE_ENV === 'dev') {
