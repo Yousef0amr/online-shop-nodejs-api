@@ -28,6 +28,9 @@ const init = async () => {
         } else {
             express.json()(req, res, next);
         }
+
+    }, (req, res) => {
+        console.log(req.body)
     });
 
     if (process.env.NODE_ENV === 'dev') {
