@@ -61,20 +61,10 @@ const webhookCheckout = async (req) => {
     const header = req.headers['stripe-signature']
 
     const payload = req.body
-
+    console.log(req.body)
     const secret = 'whsec_mKAIywDSsFky5rSW6hS6jPYw122gOxBh'
 
     event = stripe.webhooks.constructEvent(payload, header, secret);
-
-    //test
-    // const header = stripe.webhooks.generateTestHeaderString(
-    //     {
-    //         payload: JSON.stringify(req.body, null, 2),
-    //         secret: "whsec_mKAIywDSsFky5rSW6hS6jPYw122gOxBh"
-    //     }
-    // )
-
-    // event = stripe.webhooks.constructEvent(JSON.stringify(req.body, null, 2), header, 'whsec_mKAIywDSsFky5rSW6hS6jPYw122gOxBh');
 
     switch (event.type) {
         case 'checkout.session.completed':
@@ -84,9 +74,6 @@ const webhookCheckout = async (req) => {
         default:
             return new ApiError(`Unhandled event type ${event.type}`, 400);
     }
-
-
-
 
 }
 
