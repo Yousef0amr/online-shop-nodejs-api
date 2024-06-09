@@ -58,12 +58,13 @@ const deletePayment = async (id) => {
 const webhookCheckout = async (req) => {
     let event;
 
+    const header = req.headers['stripe-signature']
+
+
     const payload = JSON.stringify(req.body, null, 2)
     console.log('====================================');
     console.log(payload);
     console.log('====================================');
-    const header = req.headers['stripe-signature']
-    console.log(header)
 
     const secret = 'whsec_mKAIywDSsFky5rSW6hS6jPYw122gOxBh'
 
