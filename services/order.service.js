@@ -40,7 +40,7 @@ const createCashOrder = async (event) => {
         ShipmentShipmentId: shipmentId,
         UserUserId: id
     };
-
+    console.log(event.data.object)
     console.log(orderDto)
 
     // const order = await Order.create(orderDto);
