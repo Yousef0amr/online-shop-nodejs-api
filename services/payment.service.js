@@ -57,26 +57,31 @@ const deletePayment = async (id) => {
 const webhookCheckout = async (req) => {
     let event;
 
-    const header = stripe.webhooks.generateTestHeaderString(
-        {
-            payload: JSON.stringify(req.body, null, 2),
-            secret: "whsec_mKAIywDSsFky5rSW6hS6jPYw122gOxBh"
-        }
-    )
+    const sign = req.headers['stripe-signature']
 
-    event = stripe.webhooks.constructEvent(JSON.stringify(req.body, null, 2), header, 'whsec_mKAIywDSsFky5rSW6hS6jPYw122gOxBh');
+    event = stripe.webhooks.constructEvent(JSON.stringify(req.body, null, 2), sign, 'whsec_mKAIywDSsFky5rSW6hS6jPYw122gOxBh');
+
+    //test
+    // const header = stripe.webhooks.generateTestHeaderString(
+    //     {
+    //         payload: JSON.stringify(req.body, null, 2),
+    //         secret: "whsec_mKAIywDSsFky5rSW6hS6jPYw122gOxBh"
+    //     }
+    // )
+
+    // event = stripe.webhooks.constructEvent(JSON.stringify(req.body, null, 2), header, 'whsec_mKAIywDSsFky5rSW6hS6jPYw122gOxBh');
 
     switch (event.type) {
         case 'checkout.session.completed':
             const checkoutSessionCompleted = event.data.object;
-            console.log('1')
-            break;
+            console.log(checkoutSessionCompleted)
+            return true
         default:
             return new ApiError(`Unhandled event type ${event.type}`, 400);
     }
 
 
-    return checkoutSessionCompleted
+
 
 }
 
