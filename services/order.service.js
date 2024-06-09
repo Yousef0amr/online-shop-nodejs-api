@@ -2,6 +2,7 @@
 import { Op } from 'sequelize';
 import model from './../models/index.js';
 import PaymentService from './payment.service.js';
+import cartService from './cart.service.js';
 
 const { Order, Order_Items, Product, Payment, Shipment, User } = model
 

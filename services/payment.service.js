@@ -69,7 +69,6 @@ const webhookCheckout = async (req) => {
 
     switch (event.type) {
         case 'checkout.session.completed':
-
             return await orderService.createCashOrder(event)
         default:
             return new ApiError(`Unhandled event type ${event.type}`, 400);
