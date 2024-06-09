@@ -36,9 +36,9 @@ const createCashOrder = async (event) => {
     const orderDto = {
         order_date: Date.now(),
         totalOrderPrice: event.data.object.amount_total / 100,
-        PaymentPaymentId: payment.payment_id,
-        ShipmentShipmentId: shipmentId,
-        UserUserId: id
+        paymentPaymentId: payment.payment_id,
+        shipmentShipmentId: shipmentId,
+        userUserId: id
     };
 
     const order = await Order.create(orderDto);
@@ -49,7 +49,7 @@ const createCashOrder = async (event) => {
         await Order_Items.create({
             quantity: p.quantity,
             price: p.product.price,
-            ProductProductId: productId,
+            productProductId: productId,
             orderId: order.order_id
         });
 
