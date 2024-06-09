@@ -4,9 +4,9 @@ import model from './../models/index.js';
 import Stripe from 'stripe'
 import ApiError from '../utils/apiResponse.js';
 import cartService from './cart.service.js';
-import { Json } from 'sequelize/lib/utils';
 
-const { Payment } = model
+
+const { Payment, Cart, Product } = model
 
 
 const stripe = new Stripe('sk_test_51P5LRbHCIgRCYpOFfHFOMwmdwXzBMeCiASYLMgsbLJNGGXSh3kIPEOCs6uzYO2AX8BRmoqmY38B7XfbiOSgIJqor00G2dS5lqQ')
@@ -69,7 +69,16 @@ const webhookCheckout = async (req) => {
     switch (event.type) {
         case 'checkout.session.completed':
             const checkoutSessionCompleted = event.data.object;
-            console.log(checkoutSessionCompleted)
+            const id = event.data.object.client_reference_id
+
+            const cart = await cartService.getCart(id);
+
+            cart.map(async (p) => {
+                const productId = p.dataValues.product.dataValues.product_id
+                const product = await Product.findByPk(productId)
+                console.log(product)
+            })
+
             return true
         default:
             return new ApiError(`Unhandled event type ${event.type}`, 400);
@@ -109,6 +118,7 @@ const createCheckoutSession = async (req) => {
         mode: 'payment',
         success_url: `${req.protocol}://${req.get('host')}/orders`,
         cancel_url: `${req.protocol}://${req.get('host')}/cart`,
+        client_reference_id: id
     });
 
 
