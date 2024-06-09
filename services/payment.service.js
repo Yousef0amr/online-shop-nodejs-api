@@ -58,15 +58,8 @@ const webhookCheckout = async (req) => {
     const sig = req.headers['stripe-signature'];
 
     let event;
-    event = stripe.webhooks.constructEvent(req.body, sig, 'we_1PPCndHCIgRCYpOFNR60XSKQ');
 
-
-    // try {
-    //     event = stripe.webhooks.constructEvent(req.body, sig, 'whsec_mKAIywDSsFky5rSW6hS6jPYw122gOxBh');
-    // } catch (err) {
-    //     console.log(err)
-    //     return new ApiError(err.message, 400);
-    // }
+    event = stripe.webhooks.constructEvent(req.body, sig, 'whsec_mKAIywDSsFky5rSW6hS6jPYw122gOxBh');
 
     switch (event.type) {
         case 'checkout.session.completed':
