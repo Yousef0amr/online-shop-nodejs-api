@@ -13,10 +13,7 @@ paymentRouter.route('/create-checkout-session')
     .post(createCheckoutSession)
 
 paymentRouter.route('/webhook-checkout')
-    .post((req, res) => {
-        console.log(req)
-        res.json(req.body)
-    }, webhookCheckout)
+    .post(webhookCheckout)
 
 
 paymentRouter.route('/:id')

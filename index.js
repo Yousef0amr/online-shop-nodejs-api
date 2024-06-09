@@ -24,7 +24,7 @@ const init = async () => {
     app.use(express.json({
         verify:
             (req, res, buf) => {
-                console.log(buf)
+                req.rawBody = buf
             }
     }))
 
