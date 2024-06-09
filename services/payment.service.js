@@ -57,8 +57,8 @@ const deletePayment = async (id) => {
 
 const webhookCheckout = async (req) => {
     let event;
-    console.log(req.body)
-    const payload = JSON.stringify(req.body)
+
+    const payload = JSON.stringify(req.body, null, 2)
     console.log('====================================');
     console.log(payload);
     console.log('====================================');
