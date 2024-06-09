@@ -61,7 +61,7 @@ const webhookCheckout = async (req) => {
     const header = req.headers['stripe-signature']
 
     const payload = req.body
-    console.log(req.body)
+
     const secret = 'whsec_mKAIywDSsFky5rSW6hS6jPYw122gOxBh'
 
     event = stripe.webhooks.constructEvent(payload, header, secret);

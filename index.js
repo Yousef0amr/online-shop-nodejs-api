@@ -9,6 +9,7 @@ import authJwt from './middlewares/authJwt.js';
 import globelError from './middlewares/errorMiddleware.js';
 import ApiError from './utils/apiResponse.js';
 import errorMessages from './utils/errorMessages.js';
+import endpoints from './utils/endoints.js';
 
 
 
@@ -22,7 +23,7 @@ const init = async () => {
     const app = express()
 
     app.use((req, res, next) => {
-        if (req.path === '/payment/webhook-checkout') {
+        if (req.path === `${endpoints.PAYMENT}/webhook-checkout`) {
             next();
         } else {
             express.json()(req, res, next);
