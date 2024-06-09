@@ -84,7 +84,7 @@ const getCart = async (id) => {
 const calcTotalCartPrice = async (cart) => {
     let sum = 0
     await cart.map((ele) => {
-        sum += (+ele.dataValues.product.dataValues.price) * (ele.dataValues.quantity)
+        sum += (+ele.product.price) * (ele.quantity)
     })
     return sum
 }

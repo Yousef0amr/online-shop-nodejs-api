@@ -76,7 +76,8 @@ const webhookCheckout = async (req) => {
                 const productId = p.product.product_id
                 const product = await Product.findByPk(productId)
                 product.stock -= p.quantity
-                console.log(product)
+                await product.save()
+                await cartService.removeFromCart(p.cart_id)
             })
 
             return true
@@ -105,19 +106,19 @@ const createCheckoutSession = async (req) => {
         price_data: {
             currency: 'usd',
             product_data: {
-                name: item.dataValues.product.dataValues.title,
-                description: item.dataValues.product.dataValues.description,
+                name: item.product.title,
+                description: item.product.description,
             },
-            unit_amount: convertToCents(item.dataValues.product.dataValues.price),
+            unit_amount: convertToCents(item.product.price),
         },
-        quantity: item.dataValues.quantity,
+        quantity: item.quantity,
     }));
 
     const session = await stripe.checkout.sessions.create({
         line_items: lineItems,
         mode: 'payment',
         success_url: `${req.protocol}://${req.get('host')}/orders`,
-        cancel_url: `${req.protocol}://${req.get('host')}/cart`,
+        cancel_url: `${req.protocol}://${req.get('host')}/carts`,
         client_reference_id: id
     });
 
