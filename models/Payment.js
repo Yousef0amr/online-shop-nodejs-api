@@ -24,12 +24,7 @@ const PaymentModel = (sequelize) => Payment.init({
     amount: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false
-    },
-    isPaid: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false
-    },
+    }
 }, {
     sequelize,
     modelName: "payments",

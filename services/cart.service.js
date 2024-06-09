@@ -46,9 +46,14 @@ const removeFromCart = async (id) => {
         where: {
             [Op.and]: [
                 {
-                    userId: {
-                        [Op.eq]: id.userId
-                    }
+                    [Op.or]: [
+                        {
+                            userId: {
+                                [Op.eq]: id.userId
+                            }
+                        }
+                    ]
+
                 },
                 {
                     productProductId: {

@@ -3,10 +3,8 @@ import orderService from '../services/order.service.js';
 import ApiError, { success } from '../utils/apiResponse.js';
 import wrap from 'express-async-wrap'
 
-
 const updateOrder = wrap(async (req, res, next) => {
     const order = await orderService.updateOrder(req.body, req.params.id)
-
     return success(res, { order }, 200)
 })
 

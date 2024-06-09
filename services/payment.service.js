@@ -4,6 +4,7 @@ import model from './../models/index.js';
 import Stripe from 'stripe'
 import ApiError from '../utils/apiResponse.js';
 import cartService from './cart.service.js';
+import orderService from './order.service.js';
 
 
 const { Payment, Cart, Product } = model
@@ -68,19 +69,8 @@ const webhookCheckout = async (req) => {
 
     switch (event.type) {
         case 'checkout.session.completed':
-            const id = event.data.object.client_reference_id
 
-            const cart = await cartService.getCart(id);
-
-            cart.map(async (p) => {
-                const productId = p.product.product_id
-                const product = await Product.findByPk(productId)
-                product.stock -= p.quantity
-                await product.save()
-                await cartService.removeFromCart(p.cart_id)
-            })
-
-            return true
+            return await orderService.createCashOrder(event)
         default:
             return new ApiError(`Unhandled event type ${event.type}`, 400);
     }
@@ -95,6 +85,7 @@ const convertToCents = (price) => {
 
 const createCheckoutSession = async (req) => {
     const id = req.user_id
+    const shipmentId = req.params.shipmentId
 
     const cart = await cartService.getCart(id)
 
@@ -119,7 +110,10 @@ const createCheckoutSession = async (req) => {
         mode: 'payment',
         success_url: `${req.protocol}://${req.get('host')}/orders`,
         cancel_url: `${req.protocol}://${req.get('host')}/carts`,
-        client_reference_id: id
+        client_reference_id: id,
+        metadata: {
+            shipmentId
+        }
     });
 
 

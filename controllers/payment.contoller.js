@@ -16,17 +16,6 @@ const webhookCheckout = wrap(async (req, res, next) => {
 })
 
 
-
-const addPayment = wrap(async (req, res, next) => {
-    const PaymentDto = {
-        ...req.body,
-        userUserId: req.user_id
-    }
-    const payment = await PaymentService.addPayment(PaymentDto)
-    return success(res, { payment }, 201, 'Payment created successfully')
-})
-
-
 const updatePayment = wrap(async (req, res, next) => {
     const payment = await PaymentService.getPayment(req.params.id)
     if (!payment)
@@ -58,7 +47,6 @@ const getAllPayments = wrap(async (req, res, next) => {
 
 
 export {
-    addPayment,
     updatePayment,
     deletePayment,
     getPayment,

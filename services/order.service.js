@@ -1,6 +1,7 @@
 
 import { Op } from 'sequelize';
 import model from './../models/index.js';
+import PaymentService from './payment.service.js';
 
 const { Order, Order_Items, Product, Payment, Shipment, User } = model
 
@@ -16,27 +17,50 @@ const getAllOrders = async () => {
     });
 }
 
-const createOrder = async (orderDto, userId) => {
-    const { order_date, totalPrice, paymentId, shipmentId, orderItems } = orderDto;
+const createCashOrder = async (event) => {
+    const id = event.data.object.client_reference_id
+    const shipmentId = event.data.object.metadata.shipmentId
 
-    // Create the order
-    const order = await Order.create({
-        order_date,
-        totalOrderPrice: totalPrice,
-        UserUserId: userId,
-        PaymentPaymentId: paymentId,
-        ShipmentShipmentId: shipmentId
-    });
+    const cart = await cartService.getCart(id);
 
-    // Create order items
-    for (const item of orderItems) {
+    const PaymentDto = {
+        payment_date: Date.now(),
+        payment_method: "card",
+        amount: event.data.object.amount_total / 100,
+        userUserId: id
+    }
+
+    const payment = await PaymentService.addPayment(PaymentDto);
+
+    const orderDto = {
+        order_date: Date.now(),
+        totalOrderPrice: event.data.object.amount_total / 100,
+        PaymentPaymentId: payment.payment_id,
+        ShipmentShipmentId: shipmentId,
+        UserUserId: id
+    };
+
+    const order = await Order.create(orderDto);
+
+    cart.map(async (p) => {
+        const productId = p.product.product_id
+
         await Order_Items.create({
-            quantity: item.quantity,
-            price: item.price,
-            ProductProductId: item.productId,
+            quantity: p.quantity,
+            price: p.product.price,
+            ProductProductId: productId,
             orderId: order.id
         });
-    }
+
+        const product = await Product.findByPk(productId)
+        product.stock -= p.quantity
+        await product.save()
+        const removeId = {
+            userId: id,
+            productId
+        }
+        await cartService.removeFromCart(removeId)
+    })
 
     return order
 }
@@ -72,7 +96,7 @@ const deleteOrder = async (id) => {
 
 
 const orderService = {
-    createOrder,
+    createCashOrder,
     deleteOrder,
     getAllOrders,
     getOrder,
