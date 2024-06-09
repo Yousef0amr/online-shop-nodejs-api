@@ -55,11 +55,16 @@ const deletePayment = async (id) => {
 
 
 const webhookCheckout = async (req) => {
-    const sig = req.headers['stripe-signature'];
-
     let event;
 
-    event = stripe.webhooks.constructEvent(req.body, sig, 'whsec_mKAIywDSsFky5rSW6hS6jPYw122gOxBh');
+    const header = stripe.webhooks.generateTestHeaderString(
+        {
+            payload: JSON.stringify(req.body, null, 2),
+            secret: "whsec_mKAIywDSsFky5rSW6hS6jPYw122gOxBh"
+        }
+    )
+
+    event = stripe.webhooks.constructEvent(JSON.stringify(req.body, null, 2), header, 'whsec_mKAIywDSsFky5rSW6hS6jPYw122gOxBh');
 
     switch (event.type) {
         case 'checkout.session.completed':
