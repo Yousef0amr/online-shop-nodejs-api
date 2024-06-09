@@ -13,7 +13,7 @@ paymentRouter.route('/')
 paymentRouter.route('/create-checkout-session')
     .post(createCheckoutSession)
 
-paymentRouter.route(bodyParser.raw({ type: 'application/json' }), '/webhook-checkout')
+paymentRouter.route('/webhook-checkout')
     .post(webhookCheckout)
 
 
