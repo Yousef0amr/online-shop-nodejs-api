@@ -4,6 +4,7 @@ import model from './../models/index.js';
 import Stripe from 'stripe'
 import ApiError from '../utils/apiResponse.js';
 import cartService from './cart.service.js';
+import { Json } from 'sequelize/lib/utils';
 
 const { Payment } = model
 
@@ -56,10 +57,17 @@ const deletePayment = async (id) => {
 
 const webhookCheckout = async (req) => {
     let event;
+    console.log(req.body)
+    const payload = JSON.stringify(req.body)
+    console.log('====================================');
+    console.log(payload);
+    console.log('====================================');
+    const header = req.headers['stripe-signature']
+    console.log(header)
 
-    const sign = req.headers['stripe-signature']
+    const secret = 'whsec_mKAIywDSsFky5rSW6hS6jPYw122gOxBh'
 
-    event = stripe.webhooks.constructEvent(req.body, sign, 'whsec_mKAIywDSsFky5rSW6hS6jPYw122gOxBh');
+    event = stripe.webhooks.constructEvent(payload, header, secret);
 
     //test
     // const header = stripe.webhooks.generateTestHeaderString(
