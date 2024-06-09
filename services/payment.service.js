@@ -60,11 +60,12 @@ const webhookCheckout = async (req) => {
 
     const header = req.headers['stripe-signature']
 
+    console.log('====================================');
+    console.log(req.rawBody);
+    console.log('====================================');
 
-    const payload = JSON.stringify(req.body, null, 2)
-    console.log('====================================');
-    console.log(payload);
-    console.log('====================================');
+
+    const payload = req.rawBody
 
     const secret = 'whsec_mKAIywDSsFky5rSW6hS6jPYw122gOxBh'
 

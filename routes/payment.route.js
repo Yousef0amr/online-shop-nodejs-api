@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { json, raw, Router } from "express";
 import validateRequest from "../middlewares/validateRequest.js";
 import { addPaymentSchema, updatePaymentShema } from './../validators/payment.validator.js'
 import { addPayment, createCheckoutSession, deletePayment, getAllPayments, getPayment, updatePayment, webhookCheckout } from './../controllers/payment.contoller.js'
@@ -13,7 +13,11 @@ paymentRouter.route('/create-checkout-session')
     .post(createCheckoutSession)
 
 paymentRouter.route('/webhook-checkout')
-    .post(webhookCheckout)
+    .post(json({
+        verify: (req, res, buf) => {
+            req.rawBody = buf
+        }
+    }), webhookCheckout)
 
 
 paymentRouter.route('/:id')
