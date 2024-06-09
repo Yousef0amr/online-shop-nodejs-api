@@ -14,7 +14,7 @@ paymentRouter.route('/create-checkout-session')
     .post(createCheckoutSession)
 
 paymentRouter.route('/webhook-checkout')
-    .post(webhookCheckout)
+    .post(raw({ type: 'application/json' }), webhookCheckout)
 
 
 paymentRouter.route('/:id')
