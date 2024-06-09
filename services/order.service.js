@@ -50,7 +50,7 @@ const createCashOrder = async (event) => {
             quantity: p.quantity,
             price: p.product.price,
             ProductProductId: productId,
-            orderId: order.id
+            orderId: order.order_id
         });
 
         const product = await Product.findByPk(productId)
