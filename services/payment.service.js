@@ -88,7 +88,7 @@ const createCheckoutSession = async (req) => {
 
     const cart = await cartService.getCart(id)
 
-    if (!cart) {
+    if (cart) {
         return new ApiError('Cart is Emety', 400)
     }
 
