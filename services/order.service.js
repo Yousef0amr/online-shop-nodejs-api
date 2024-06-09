@@ -41,29 +41,31 @@ const createCashOrder = async (event) => {
         UserUserId: id
     };
 
-    const order = await Order.create(orderDto);
+    console.log(orderDto)
 
-    cart.map(async (p) => {
-        const productId = p.product.product_id
+    // const order = await Order.create(orderDto);
 
-        await Order_Items.create({
-            quantity: p.quantity,
-            price: p.product.price,
-            ProductProductId: productId,
-            orderId: order.order_id
-        });
+    // cart.map(async (p) => {
+    //     const productId = p.product.product_id
 
-        const product = await Product.findByPk(productId)
-        product.stock -= p.quantity
-        await product.save()
-        const removeId = {
-            userId: id,
-            productId
-        }
-        await cartService.removeFromCart(removeId)
-    })
+    //     await Order_Items.create({
+    //         quantity: p.quantity,
+    //         price: p.product.price,
+    //         ProductProductId: productId,
+    //         orderId: order.order_id
+    //     });
 
-    return order
+    //     const product = await Product.findByPk(productId)
+    //     product.stock -= p.quantity
+    //     await product.save()
+    //     const removeId = {
+    //         userId: id,
+    //         productId
+    //     }
+    //     await cartService.removeFromCart(removeId)
+    // })
+
+    // return order
 }
 
 
