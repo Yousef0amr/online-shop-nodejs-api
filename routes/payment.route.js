@@ -15,6 +15,7 @@ paymentRouter.route('/create-checkout-session')
 paymentRouter.route('/webhook-checkout')
     .post(json({
         verify: (req, res, buf) => {
+            console.log(buf)
             req.rawBody = buf
         }
     }), webhookCheckout)
